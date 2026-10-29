@@ -1,0 +1,36 @@
+version: 1
+project:
+  root: .
+  build_config: lzc-build.yml
+  package_file: package.yml
+  output: dist/velxio.lpk
+  target_arch: amd64
+update:
+  strategy: publish
+  sync_license: true
+  allow_downgrade: false
+  version_source:
+    type: image
+    image: velxio
+    bump: patch
+build:
+  run_buildscript: false
+images:
+  - id: velxio
+    target: service
+    service: velxio
+    source: ghcr.io/davidmonterocrespo24/velxio
+    channel: custom
+    sort: created
+    tag_regex: ^master$
+    delivery:
+      mode: mirror
+      require_digest_match: true
+stores:
+  official:
+    enabled: false
+  private:
+    enabled: true
+    skip_if_version_exists: true
+    name: Velxio
+    summary: 在浏览器中编写、编译和仿真 Arduino、RP2040 与 ESP32 项目

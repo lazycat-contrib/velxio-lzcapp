@@ -1,0 +1,45 @@
+application:
+  subdomain: velxio
+  upstreams:
+    - location: /
+      backend: http://velxio:80/
+  injects:
+    - id: open-save-chooser
+      on: browser
+      when:
+        - /*
+      do:
+        - src: file:///lzcapp/pkg/content/lazycat-injects/lzc-file-chooser-inject.js
+services:
+  velxio:
+    # upstream: ghcr.io/davidmonterocrespo24/velxio:master@sha256:a35cf8a63fdf4082b7f3aeca4dd3165ff206600166220765baec7632b0a277dd
+    image: ghcr.1ms.run/davidmonterocrespo24/velxio:master@sha256:a35cf8a63fdf4082b7f3aeca4dd3165ff206600166220765baec7632b0a277dd
+    user: root
+    environment:
+      - DATA_DIR=/app/data
+      - DATABASE_URL=sqlite+aiosqlite:////app/data/velxio.db
+      - VELXIO_PERSISTENT_BUILD_DIR=1
+    binds:
+      - /lzcapp/var/data:/app/data
+      - /lzcapp/var/arduino15:/root/.arduino15
+      - /lzcapp/var/arduino-libraries:/root/Arduino
+      - /lzcapp/cache/ccache:/var/cache/ccache
+      - /lzcapp/cache/build:/var/lib/velxio-build
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - --fail
+        - --silent
+        - http://127.0.0.1/health
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      # Upstream installs Arduino cores before starting the HTTP server.
+      start_period: 30m
+usage: |-
+  本应用只发布喵喵商店，使用上游 OSS 自托管镜像，以 root 运行。
+  保留懒猫网关登录；上游 OSS 没有独立账号体系，不要绕过网关公开服务。
+  首次启动需要联网下载 Arduino 板卡核心，可能耗时较长；页面可打开不代表所有板卡工具链均已安装。
+  项目请使用应用的导入/导出功能备份；不承诺云端账号或跨用户项目隔离。
+  编译缓存可由系统清理，清理后首次编译会更慢。自托管版功能以 OSS 镜像为准，不包含所有商业版板卡。
