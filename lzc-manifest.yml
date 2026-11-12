@@ -12,8 +12,8 @@ application:
         - src: file:///lzcapp/pkg/content/lazycat-injects/lzc-file-chooser-inject.js
 services:
   velxio:
-    # upstream: ghcr.io/davidmonterocrespo24/velxio:master@sha256:2da1993f563b2d96476984100f08649106f414013f3abdd16b3f2a8106381d22
-    image: ghcr.1ms.run/davidmonterocrespo24/velxio:master@sha256:2da1993f563b2d96476984100f08649106f414013f3abdd16b3f2a8106381d22
+    # upstream: ghcr.io/davidmonterocrespo24/velxio:master@sha256:8558eb55b4ea2517961646f298d49063470d61dc5c4a9b08746276d5e9928bdf
+    image: ghcr.1ms.run/davidmonterocrespo24/velxio:master@sha256:8558eb55b4ea2517961646f298d49063470d61dc5c4a9b08746276d5e9928bdf
     user: root
     environment:
       - DATA_DIR=/app/data
